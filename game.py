@@ -1,5 +1,6 @@
 import random
 
+
 class Game:
     top = ""
     bot = ""
@@ -7,12 +8,16 @@ class Game:
     rows = 0
     bridge = []
     players = []
+    current_player = 1
+    current_row = 1
 
     def __init__(self, players, rows):
         self.num_players = players
         self.rows = rows
         self.make_bridge(rows)
         self.make_players(players)
+        self.current_player = 1
+        self.current_row = 1
 
     def make_bridge(self, num):
         for i in range(num):
@@ -23,16 +28,16 @@ class Game:
         for i in range(num):
             self.players.append(i)
 
-    def take_step(self, bridge, row):
+    def take_step(self, row):
         guess = random.randint(0, 1)
-        if bridge[row] == guess:
+        if self.bridge[row] == guess:
             return True
         else:
             return False
 
-    def display_bridge(self, bridge, row, state):
+    def display_bridge(self, row, state):
         if state:
-            if bridge[row] == 0:
+            if self.bridge[row] == 0:
                 self.top += "[]"
                 self.bot += " O"
                 print(self.top)
@@ -43,7 +48,7 @@ class Game:
                 print(self.top)
                 print(self.bot)
         else:
-            if bridge[row] == 0:
+            if self.bridge[row] == 0:
                 self.top += "[]"
                 self.bot += " X"
                 print(self.top)
@@ -53,3 +58,29 @@ class Game:
                 self.bot += "[]"
                 print(self.top)
                 print(self.bot)
+
+    def play_game(self, sleep = False):
+        while True:
+            state = False
+            result = self.take_step(self.current_row)
+            if result:
+                self.current_row += 1
+                state = True
+            else:
+                print(f'{self.current_player} fell!')
+                self.current_player += 1
+                self.current_row += 1
+                state = False
+
+            self.display_bridge(self.current_row - 1, state)
+
+            if self.current_player >= self.num_players:
+                print(f'Last player fell on row {self.current_row}')
+                break
+
+            if self.current_row >= self.rows:
+                print(f'First player to make it was {self.current_player}')
+                break
+
+        print('Game is over!')
+
