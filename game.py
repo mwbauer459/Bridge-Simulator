@@ -1,4 +1,5 @@
 import random
+from time import sleep
 
 
 class Game:
@@ -36,6 +37,7 @@ class Game:
             return False
 
     def display_bridge(self, row, state):
+        # sleep(1)
         if state:
             if self.bridge[row] == 0:
                 self.top += "[]"
@@ -59,26 +61,32 @@ class Game:
                 print(self.top)
                 print(self.bot)
 
-    def play_game(self, sleep = False):
+    def play_game(self, slurp = False):
         while True:
             state = False
             result = self.take_step(self.current_row)
+
             if result:
-                self.current_row += 1
                 state = True
+                self.display_bridge(self.current_row - 1, state)
+                sleep(1)
+                self.current_row += 1
+
             else:
+                state = False
+                self.display_bridge(self.current_row - 1, state)
+                sleep(1)
                 print(f'{self.current_player} fell!')
                 self.current_player += 1
                 self.current_row += 1
-                state = False
 
-            self.display_bridge(self.current_row - 1, state)
-
-            if self.current_player >= self.num_players:
+            if self.current_player > self.num_players:
+                sleep(1)
                 print(f'Last player fell on row {self.current_row}')
                 break
 
             if self.current_row >= self.rows:
+                sleep(1)
                 print(f'First player to make it was {self.current_player}')
                 break
 

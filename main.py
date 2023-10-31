@@ -1,14 +1,13 @@
-import random
+
 import game
 
-trial = game.Game(12, 12)
+trial = game.Game(6, 16)
 
 trial.play_game()
 
-
-# top = ''
 # bot = ''
-#
+# top = ''
+# 
 #
 # def make_bridge(num):
 #     bridge = []
